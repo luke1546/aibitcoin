@@ -1,5 +1,9 @@
 # 비트코인 GPT 인공지능 AI 업비트 자동매매 시스템 만들기
 - GPT API를 활용하여 투자를 자동화 합니다.
+- 실시간 모니터링 보기
+```
+http://15.164.245.174:8501
+```
 
 ![PieChart](./images/PieChart.png)
 
@@ -87,6 +91,9 @@ python3 autotrade.py
 - 백그라운드 실행
 ```
 nohup python3 -u autotrade.py > output.log 2>&1 &
+```
+- streamlit 모니터링 실행
+```
 nohup python3 -m streamlit run streamlit_app.py --server.port 8501 > streamlit.log 2>&1 &
 ```
 - 로그 보기
