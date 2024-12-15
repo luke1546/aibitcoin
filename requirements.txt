@@ -1,10 +1,9 @@
 python-dotenv
 openai
 pyupbit
-ta
-selenium
-webdriver-manager
-Pillow
-youtube-transcript-api
+pyjwt
+pandas
+pandas_ta
+schedule
 streamlit
-plotly
+selenium

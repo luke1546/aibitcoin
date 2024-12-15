@@ -11,12 +11,6 @@ import time
 import requests
 from datetime import datetime
 import sqlite3
-from selenium import webdriver
-from selenium.webdriver.chrome.service import Service
-from selenium.webdriver.common.by import By
-from selenium.webdriver.support.ui import WebDriverWait
-from selenium.webdriver.support import expected_conditions as EC
-import base64
 
 # Setup
 client = OpenAI(api_key=os.getenv("OPENAI_API_KEY"))
@@ -215,61 +209,6 @@ def fetch_fear_and_greed_index(limit=1, date_format=''):
         resStr += str(data)
     return resStr
 
-def get_current_base64_image():
-    screenshot_path = "screenshot.png"
-    try:
-        # Set up Chrome options for headless mode
-        chrome_options = webdriver.ChromeOptions()
-        chrome_options.add_argument("--headless")
-        chrome_options.add_argument("--no-sandbox")
-        chrome_options.add_argument("--disable-dev-shm-usage")
-        chrome_options.add_argument("--disable-gpu")
-        chrome_options.add_argument("--window-size=1920x1080")
-
-        service = Service('/usr/local/bin/chromedriver')  # Specify the path to the ChromeDriver executable
-
-        # Initialize the WebDriver with the specified options
-        driver = webdriver.Chrome(service=service, options=chrome_options)
-
-        # Navigate to the desired webpage
-        driver.get("https://upbit.com/full_chart?code=CRIX.UPBIT.KRW-BTC")
-
-        # Wait for the page to load completely
-        wait = WebDriverWait(driver, 10)  # 10 seconds timeout
-
-        # Wait for the first menu item to be clickable and click it
-        first_menu_item = wait.until(EC.element_to_be_clickable((By.XPATH, "//*[@id='fullChartiq']/div/div/div[1]/div/div/cq-menu[1]")))
-        first_menu_item.click()
-
-        # Wait for the "1 Hour" option to be clickable and click it
-        one_hour_option = wait.until(EC.element_to_be_clickable((By.XPATH, "//cq-item[@stxtap=\"Layout.setPeriodicity(1,60,'minute')\"]")))
-        one_hour_option.click()
-
-        # Wait for the indicators menu item to be clickable and click it
-        indicators_menu_item = wait.until(EC.element_to_be_clickable((By.XPATH, "//*[@id='fullChartiq']/div/div/div[1]/div/div/cq-menu[3]")))
-        indicators_menu_item.click()
-
-        # Wait for the indicators container to be present
-        indicators_container = wait.until(EC.presence_of_element_located((By.CSS_SELECTOR, "cq-scroll.ps-container")))
-
-        # Scroll the container to make the "MACD" indicator visible
-        driver.execute_script("arguments[0].scrollTop = arguments[0].scrollHeight / 2.5", indicators_container)
-
-        # Wait for the "MACD" indicator to be clickable and click it
-        macd_indicator = wait.until(EC.element_to_be_clickable((By.XPATH, "//cq-item[translate[@original='MACD']]")))
-        macd_indicator.click()
-
-        # Take a screenshot to verify the actions
-        driver.save_screenshot(screenshot_path)
-    except Exception as e:
-        print(f"Error making current image: {e}")
-        return ""
-    finally:
-        # Close the browser
-        driver.quit()
-        with open(screenshot_path, "rb") as image_file:
-            return base64.b64encode(image_file.read()).decode('utf-8')
-
 def get_instructions(file_path):
     try:
         with open(file_path, "r", encoding="utf-8") as file:
@@ -280,8 +219,8 @@ def get_instructions(file_path):
     except Exception as e:
         print("An error occurred while reading the file:", e)
 
-def analyze_data_with_gpt4(news_data, data_json, last_decisions, fear_and_greed, current_status, current_base64_image):
-    instructions_path = "instructions_v3.md"
+def analyze_data_with_gpt4(news_data, data_json, last_decisions, fear_and_greed, current_status):
+    instructions_path = "instructions_v2.md"
     try:
         instructions = get_instructions(instructions_path)
         if not instructions:
@@ -289,15 +228,14 @@ def analyze_data_with_gpt4(news_data, data_json, last_decisions, fear_and_greed,
             return None
         
         response = client.chat.completions.create(
-            model="gpt-4o",
+            model="gpt-4-turbo-preview",
             messages=[
                 {"role": "system", "content": instructions},
                 {"role": "user", "content": news_data},
                 {"role": "user", "content": data_json},
                 {"role": "user", "content": last_decisions},
                 {"role": "user", "content": fear_and_greed},
-                {"role": "user", "content": current_status},
-                {"role": "user", "content": [{"type": "image_url","image_url": {"url": f"data:image/jpeg;base64,{current_base64_image}"}}]}
+                {"role": "user", "content": current_status}
             ],
             response_format={"type":"json_object"}
         )
@@ -338,7 +276,6 @@ def make_decision_and_execute():
         last_decisions = fetch_last_decisions()
         fear_and_greed = fetch_fear_and_greed_index(limit=30)
         current_status = get_current_status()
-        current_base64_image = get_current_base64_image()
     except Exception as e:
         print(f"Error: {e}")
     else:
@@ -347,10 +284,10 @@ def make_decision_and_execute():
         decision = None
         for attempt in range(max_retries):
             try:
-                advice = analyze_data_with_gpt4(news_data, data_json, last_decisions, fear_and_greed, current_status, current_base64_image)
+                advice = analyze_data_with_gpt4(news_data, data_json, last_decisions, fear_and_greed, current_status)
                 decision = json.loads(advice)
                 break
-            except Exception as e:
+            except json.JSONDecodeError as e:
                 print(f"JSON parsing failed: {e}. Retrying in {retry_delay_seconds} seconds...")
                 time.sleep(retry_delay_seconds)
                 print(f"Attempt {attempt + 2} of {max_retries}")
@@ -372,7 +309,7 @@ def make_decision_and_execute():
 
 if __name__ == "__main__":
     initialize_db()
-    # testing
+    #testing
     # schedule.every().minute.do(make_decision_and_execute)
 
     # Schedule the task to run at 00:01
