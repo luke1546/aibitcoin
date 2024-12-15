@@ -1,6 +1,8 @@
 # 비트코인 GPT 인공지능 AI 업비트 자동매매 시스템 만들기
 - GPT API를 활용하여 투자를 자동화 합니다.
 
+![PieChart](./images/PieChart.png)
+
 ## 전략 소개
 ### 1.autotrade.py, instruction.md
 - 데이터: 일(30일), 시간(24시간) OHLCV, Moving Averages, RSI, Stochastic Oscillator, MACD, Bollinger Bands, Orderbook Data
