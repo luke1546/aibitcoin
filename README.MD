@@ -80,11 +80,11 @@ vim autotrade.py
 ### 실행하기
 - 그냥 실행
 ```
-python3 autotrade_v3.py
+python3 autotrade.py
 ```
 - 백그라운드 실행
 ```
-nohup python3 -u autotrade_v3.py > output.log 2>&1 &
+nohup python3 -u autotrade.py > output.log 2>&1 &
 nohup python3 -m streamlit run streamlit_app.py --server.port 8501 > streamlit.log 2>&1 &
 ```
 - 로그 보기
