@@ -1,14 +1,5 @@
 # 비트코인 GPT 인공지능 AI 업비트 자동매매 시스템 만들기
-- GPT API를 활용하여 투자를 자동화 합니다. by 유튜버 조코딩
-
-## 관련 링크
-- [수업 자료](https://jocoding.net/bitcoin)
-- [1편 - 라이브 풀버전 링크(멤버십 전용)](https://youtube.com/live/-7IVgjUw79s?feature=share)
-- [2편 - 라이브 풀버전 링크(멤버십 전용)](https://youtube.com/live/GhZenus5rww?feature=share)
-- [3편 - 라이브 풀버전 링크(멤버십 전용)](https://youtube.com/live/ORo8QAn-g74?feature=share)
-- [4편 - 라이브 풀버전 링크(멤버십 전용)](https://youtube.com/live/mUTGW4MhL-8?feature=share)
-
-- [(재촬영 편집본) GPT에게 맡기는 AI 비트코인 투자 자동화](https://www.youtube.com/playlist?list=PLU9-uwewPMe0LLUQrBm9vfS62Jkju_rpU)
+- GPT API를 활용하여 투자를 자동화 합니다.
 
 ## 전략 소개
 ### 1.autotrade.py, instruction.md
@@ -89,11 +80,12 @@ vim autotrade.py
 ### 실행하기
 - 그냥 실행
 ```
-python3 autotrade.py
+python3 autotrade_v3.py
 ```
 - 백그라운드 실행
 ```
-nohup python3 -u autotrade.py > output.log 2>&1 &
+nohup python3 -u autotrade_v3.py > output.log 2>&1 &
+nohup python3 -m streamlit run streamlit_app.py --server.port 8501 > streamlit.log 2>&1 &
 ```
 - 로그 보기
 ```
@@ -109,5 +101,3 @@ ps ax | grep .py
 kill -9 PID
 ex. kill -9 13586
 ```
-## 추후 계획
-- 빗썸, 바이낸스, 코인베이스, OKX, 바이비트도 가능하면 다루겠음
