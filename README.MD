@@ -1,3 +1,12 @@
+<--
+- [수업 자료](https://jocoding.net/bitcoin)
+- [1편 - 라이브 풀버전 링크(멤버십 전용)](https://youtube.com/live/-7IVgjUw79s?feature=share)
+- [2편 - 라이브 풀버전 링크(멤버십 전용)](https://youtube.com/live/GhZenus5rww?feature=share)
+- [3편 - 라이브 풀버전 링크(멤버십 전용)](https://youtube.com/live/ORo8QAn-g74?feature=share)
+- [4편 - 라이브 풀버전 링크(멤버십 전용)](https://youtube.com/live/mUTGW4MhL-8?feature=share)
+- [(재촬영 편집본) GPT에게 맡기는 AI 비트코인 투자 자동화](https://www.youtube.com/playlist?list=PLU9-uwewPMe0LLUQrBm9vfS62Jkju_rpU)
+-->
+
 # 비트코인 GPT 인공지능 AI 업비트 자동매매 시스템 만들기
 - GPT API를 활용하여 투자를 자동화 합니다.
 - [실시간 모니터링 보기](http://15.164.245.174:8501)
