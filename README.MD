@@ -1,4 +1,4 @@
-<--
+<!--
 - [수업 자료](https://jocoding.net/bitcoin)
 - [1편 - 라이브 풀버전 링크(멤버십 전용)](https://youtube.com/live/-7IVgjUw79s?feature=share)
 - [2편 - 라이브 풀버전 링크(멤버십 전용)](https://youtube.com/live/GhZenus5rww?feature=share)
